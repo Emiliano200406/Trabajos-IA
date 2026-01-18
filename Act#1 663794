@@ -1,0 +1,81 @@
+## Actividad 1.1
+Esta actividad consiste en elaborar un reporte técnico de aprendizaje estadístico-automático a partir de un conjunto de datos sobre niveles de obesidad en población de Colombia, Perú y México. El objetivo es que analices el conjunto de datos de manera integral, comenzando con una exploración inicial, reflexiones críticamente sobre el diseño del estudio, definas una variable de interés para inferencia, y realices un análisis gráfico enfocado en una subpoblación específica
+
+### Introducción
+El problema de la obesidad se ha consolidado como uno de los principales problemas de salud publica a nivel mundial, impactando principalmente a paises latinoamericanos. Su origen es multifactorial y esta estrechamente relacionado con habitos alimenticios, su atividad fisica, caracteristicas demograficas y mas factores relacionados a su estilo de vida.
+
+En este contexto, la presente actividad se centra en el análisis de un conjunto de datos recopilado por investigadores de la Universidad de la Costa, que incluye información de individuos provenientes de Colombia, Perú y México. Dicho conjunto de datos contiene variables demográficas, de hábitos y de salud, así como una variable categórica que describe el nivel de obesidad calculado a partir del índice de masa corporal. A través de técnicas de análisis exploratorio y de inferencia estadística, se busca identificar patrones, relaciones y comportamientos relevantes dentro de la información.
+
+El objetivo de este reporte es documentar de manera clara y estructurada el proceso de análisis realizado, presentando la metodología empleada, los principales resultados obtenidos y las conclusiones derivadas.
+
+### Metodologia
+Para realizar el análisis, se utilizó Python como lenguaje de programación, apoyándose en la biblioteca pandas para la manipulación y análisis de datos, matplotlib y seaborn para la generación de visualizaciones, y scikit-learn como apoyo potencial para técnicas de inferencia o modelado. Esta combinación permitió realizar un análisis eficiente del conjunto de datos y obtener resultados claros para su posterior interpretación.
+
+A continuación, se presenta el código utilizado para la carga y exploración inicial del conjunto de datos, cuyo objetivo es comprender la estructura, dimensiones y tipos de variables disponibles, así como obtener un primer acercamiento estadístico a la información:
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar el conjunto de datos
+data = pd.read_csv("A1.1 Obesidad.csv")
+
+# Exploración inicial del conjunto de datos
+print(data.head())
+```
+#### Propuesta de variable adicional
+Desde una perspectiva crítica del diseño del estudio, se considera relevante incorporar una variable adicional relacionada con el nivel de actividad física semanal medida en tiempo efectivo de ejercicio. Esta variable podría definirse como el número de minutos de actividad física moderada o intensa realizados por semana.
+
+Dicha variable sería de naturaleza cuantitativa continua, ya que se mediría en unidades de tiempo (minutos por semana), lo que permitiría realizar análisis estadísticos más precisos y comparaciones directas entre individuos y subpoblaciones.
+
+La inclusión de esta variable aportaría información clave al estudio, ya que el nivel de actividad física es uno de los factores más directamente relacionados con el desarrollo y la prevención de la obesidad. A diferencia de variables categóricas que describen hábitos de forma general, una medición cuantitativa del tiempo de ejercicio permitiría evaluar con mayor detalle su relación con los distintos niveles de obesidad, identificar posibles umbrales de riesgo y fortalecer el análisis inferencial del conjunto de datos.
+
+Incorporar esta variable mejoraría la comprensión integral del fenómeno estudiado y permitiría realizar modelos más robustos para explicar la variabilidad observada en los niveles de obesidad.
+#### Inferencia de variable
+Como parte del estudio de inferencia, se definió ComeVegetales como la variable de salida o respuesta, debido a que representa un hábito alimenticio clave estrechamente relacionado con la calidad de la dieta y, potencialmente, con los niveles de obesidad. Esta variable es de naturaleza cuantitativa ordinal, ya que se mide en una escala discreta que permite ordenar los niveles de consumo de vegetales entre los individuos.
+
+Para realizar una primera caracterización de esta variable, se llevó a cabo un análisis descriptivo básico mediante medidas resumen, utilizando la función describe() de la biblioteca pandas. A continuación se presenta el código empleado para obtener dicha descripción estadística:
+```
+# Descripción estadística de la columna "ComeVegetales"
+print(data["ComeVegetales"].describe())
+```
+El resultado obtenido indica que se cuenta con 2111 observaciones válidas, sin presencia de valores faltantes. La media del consumo de vegetales es de aproximadamente 2.42, lo que sugiere un nivel promedio moderado dentro de la escala utilizada. La desviación estándar, con un valor cercano a 0.53, refleja una variabilidad relativamente baja, indicando que la mayoría de los individuos presentan comportamientos similares en cuanto al consumo de vegetales.
+
+Los valores mínimo y máximo observados son 1 y 3, respectivamente, confirmando que la variable se encuentra acotada y corresponde a una escala ordinal discreta. La mediana, con un valor aproximado de 2.39, es cercana a la media, lo que sugiere una distribución aproximadamente simétrica, sin sesgos marcados. Asimismo, el 75% de los individuos presenta un consumo de vegetales igual o menor a 3, lo que indica que una proporción considerable de la población reporta niveles altos de consumo dentro de la escala definida.
+
+Este análisis descriptivo permite comprender el comportamiento general de la variable ComeVegetales y establece una base sólida para los análisis gráficos e inferenciales posteriores, en los que se explora su relación con el nivel de obesidad y otras variables relevantes del conjunto de datos.
+### Resultados y conclusiones
+A partir del análisis descriptivo de la variable ComeVegetales, se identificó que el consumo de vegetales en la población analizada presenta un nivel promedio moderado y una variabilidad relativamente baja. Esta primera caracterización permitió comprender el comportamiento general de la variable de salida antes de analizar su relación con otras variables del conjunto de datos.
+
+Como parte del último apartado de la actividad, se realizó un análisis gráfico enfocado en una subpoblación específica, seleccionando a la población masculina. El objetivo fue explorar la relación entre el nivel de obesidad (variable categórica) y el consumo de vegetales (variable cuantitativa). Dado que el nivel de obesidad es una variable categórica, fue necesario realizar una codificación numérica para poder representarla gráficamente.
+
+A continuación se muestra el código utilizado para generar el análisis gráfico correspondiente:
+```
+# Codificar NivelDeObesidad a valores numéricos
+categorias = df["NivelDeObesidad"].unique()
+mapa = {cat: i for i, cat in enumerate(categorias)}
+df["NivelNum"] = df["NivelDeObesidad"].map(mapa)
+
+# Gráfica de dispersión
+plt.figure(figsize=(10, 5))
+plt.scatter(
+    x=df["NivelNum"],
+    y=df["ComeVegetales"],
+    alpha=0.5
+)
+
+# Etiquetas y títulos
+plt.xticks(
+    ticks=range(len(mapa)),
+    labels=mapa.keys(),
+    rotation=45
+)
+plt.xlabel("Nivel de obesidad")
+plt.ylabel("Consumo de vegetales")
+plt.title("Consumo de vegetales vs Nivel de obesidad (Población masculina)")
+plt.show()
+```
+El gráfico de dispersión obtenido muestra que el consumo de vegetales se distribuye de manera similar entre las distintas categorías de obesidad en la población masculina. No se observa una tendencia clara que indique que un mayor o menor consumo de vegetales esté directamente asociado con un nivel específico de obesidad. Los valores tienden a concentrarse en niveles intermedios de consumo independientemente de la categoría de obesidad.
+
+En conclusión, los resultados sugieren que, aunque el consumo de vegetales es un indicador importante de hábitos alimenticios saludables, no resulta suficiente por sí solo para explicar las diferencias en los niveles de obesidad dentro de la subpoblación analizada. Esto refuerza la idea de que la obesidad es un fenómeno multifactorial, influenciado por múltiples variables como la actividad física, otros hábitos alimenticios y factores de estilo de vida. El análisis realizado cumple con los objetivos planteados en la actividad y proporciona una base sólida para estudios inferenciales más profundos en trabajos futuros.
